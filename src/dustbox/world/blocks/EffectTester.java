@@ -29,26 +29,31 @@ public class EffectTester extends BaseTester{
                     // oh my fucking god
                     cons = (Cons<EffectContainer>) ((Wrapper) scripts.context.evaluateString(scripts.scope, getCode(text), this + "@" + x + "," + y, 0)).unwrap();
                 }catch(Exception e){
+                    error(e);
                     Log.info(e);
                 }
             });
         }
 
         @Override
+        public String getCode(String text){
+            return "cons(e=>{try{" + text + "}catch(error){e.lifetime = 0; e.data.error(error.message);}})";
+        }
+
+        public void error(String s){
+            message("[scarlet]Error:[] " + s);
+        }
+
+        @Override
         public void run(){
-            if(effect == null) effect = new Effect(60, e -> {});
-            if(changed){
+            if(changed || effect == null){
                 updateCons(content);
+                if(effect == null) effect = new Effect(60, e -> {});
                 effect.renderer = cons;
             }
-            if(cons != null){
-                effect.lifetime = lifetime;
-                try{
-                    effect.at(x, y);
-                }catch(Exception e){
-                    error(e);
-                }
-            }
+
+            effect.lifetime = lifetime;
+            effect.at(x, y, 0, this);
 
             changed = false;
         }

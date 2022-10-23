@@ -2,6 +2,7 @@ package dustbox.ui;
 
 import arc.*;
 import arc.scene.ui.*;
+import arc.util.*;
 import mindustry.gen.*;
 import mindustry.ui.dialogs.*;
 import dustbox.world.blocks.BaseTester.*;
@@ -21,6 +22,7 @@ public class EditDialog extends BaseDialog{
         area.setMaxLength(1000); // packet sizes go brrrrr
 
         buttons.button(Core.bundle.get("ok"), Icon.save, () -> {
+            Log.info(area.getText());
             if(build != null) build.configure(area.getText());
             hide();
         });

@@ -30,6 +30,7 @@ public class BaseTester extends Block{
         config(String.class, (TesterBuild t, String s) -> {
             t.changed = true;
             t.content = s;
+            t.updateCons(t.content);
         });
     }
 
@@ -77,13 +78,17 @@ public class BaseTester extends Block{
         }
 
         public void error(Exception e){
+            message("[scarlet]Error:[] " + e.getMessage());
+        };
+
+        public void message(String s){
             Sounds.unlock.play();
             if(log != null){
-                log = log.addLog(new LogsTable("[scarlet]Error:[] " + e.getMessage(), 4, 0.5f, x, y + 8));
+                log = log.addLog(new LogsTable(s, 4, 0.5f, x, y + 8));
             }else{
-                log = new LogsTable("[scarlet]Error:[] " + e.getMessage(), 4, 0.5f, x, y + 8);
+                log = new LogsTable(s, 4, 0.5f, x, y + 8);
             }
-        };
+        }
 
         public void edit(){
             edit.show(content, this);
